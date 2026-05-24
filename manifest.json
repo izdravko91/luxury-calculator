@@ -1,0 +1,17 @@
+{
+  "name": "Aethelis Luxury Calculator",
+  "short_name": "Aethelis",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#090a0d",
+  "theme_color": "#d4af37",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
