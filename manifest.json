@@ -1,17 +1,21 @@
 {
-  "name": "Aethelis Luxury Calculator",
-  "short_name": "Aethelis",
-  "start_url": "index.html",
+  "name": "Aureum Scientific Calculator",
+  "short_name": "Aureum",
+  "description": "Ultra-Premium Industrial Calculator",
+  "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#090a0d",
+  "background_color": "#050505",
   "theme_color": "#d4af37",
-  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "icon.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }

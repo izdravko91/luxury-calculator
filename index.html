@@ -1,104 +1,117 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark-luxury">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aethelis - Ultra-Premium Industrial Calculator</title>
-  
+  <title>Aureum - Precision Computational Tool</title>
   <link rel="stylesheet" href="style.css">
-
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#090a0d">
-
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then((reg) => console.log('Aethelis PWA Activated Successfully.', reg.scope))
-          .catch((err) => console.error('PWA Registration Failed:', err));
+        navigator.serviceWorker.register('sw.js').then(() => console.log('Aureum Service Worker Active.'));
       });
     }
   </script>
-  </head>
+</head>
 <body>
 
-  <div class="ambient-glow" silent="true"></div>
+  <div class="magic-orb orb-1"></div>
+  <div class="magic-orb orb-2"></div>
 
   <div class="app-container">
-    <header class="app-header" role="banner">
+    <header class="app-header">
       <div class="brand">
-        <span class="logo-dot" aria-hidden="true"></span>
-        <h1>Aethelis</h1>
+        <span class="logo-dot"></span>
+        <h1>Aureum v3.8</h1>
       </div>
-      <div class="controls-group">
-        <button id="scientific-toggle" class="btn-control" aria-label="Toggle Advanced Mathematical Panel" aria-pressed="false">Scientific</button>
-        <button id="theme-toggle" class="btn-control" aria-label="Toggle Chrome Visual Appearance Profile">Theme</button>
+      <div class="theme-switcher-deck">
+        <button class="theme-pill active" data-theme-set="dark-luxury">Dark</button>
+        <button class="theme-pill" data-theme-set="aureum-gold">Gold</button>
+        <button class="theme-pill" data-theme-set="midnight-blue">Midnight</button>
+        <button class="theme-pill" data-theme-set="minimal-white">Light</button>
       </div>
     </header>
 
-    <main class="workspace" role="main">
-      <section class="calculator-deck" aria-label="Execution Console">
-        <div class="display-unit" aria-live="polite" aria-atomic="true">
-          <div id="display-expression" class="expression-line" aria-hidden="true"></div>
-          <div id="display-current" class="current-line" tabIndex="0">0</div>
-        </div>
+    <main class="calculator-deck">
+      <div class="display-unit">
+        <div id="display-expression" class="expression-line"></div>
+        <div id="display-current" class="current-line" tabindex="0">0</div>
+        
+        <button id="toggle-history" class="btn-history-toggle" aria-label="Toggle History">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </button>
 
-        <div id="keypad" class="keypad-grid">
-          <button type="button" data-action="sin" class="btn btn-sci" aria-label="Sine Function">sin</button>
-          <button type="button" data-action="cos" class="btn btn-sci" aria-label="Cosine Function">cos</button>
-          <button type="button" data-action="tan" class="btn btn-sci" aria-label="Tangent Function">tan</button>
-          <button type="button" data-action="sqrt" class="btn btn-sci" aria-label="Square Root">√</button>
-          <button type="button" data-action="pow" class="btn btn-sci" aria-label="Exponent Power Function">^</button>
-          <button type="button" data-value="π" class="btn btn-sci" aria-label="Mathematical Constant Pi">π</button>
-          <button type="button" data-value="e" class="btn btn-sci" aria-label="Mathematical Constant Euler Number">e</button>
-          <button type="button" data-action="clear-entry" class="btn btn-sci" aria-label="Clear Current Numerical Input Entry">CE</button>
+        <button id="toggle-scientific" class="btn-sci-toggle" aria-label="Toggle Scientific Mode">ƒx</button>
+      </div>
 
-          <button type="button" data-action="clear" class="btn btn-utility btn-clear" aria-label="Purge Computational Memory Core">C</button>
-          <button type="button" data-action="toggle-sign" class="btn btn-utility" aria-label="Invert Positive Negative Sign">±</button>
-          <button type="button" data-action="percent" class="btn btn-utility" aria-label="Convert Fractional Percentage">%</button>
-          <button type="button" data-operator="÷" class="btn btn-operator" aria-label="Division Operator">÷</button>
+      <div id="keypad" class="keypad-grid">
+        <button type="button" data-action="sin" class="btn btn-sci">sin</button>
+        <button type="button" data-action="cos" class="btn btn-sci">cos</button>
+        <button type="button" data-action="tan" class="btn btn-sci">tan</button>
+        <button type="button" data-value="π" class="btn btn-sci">π</button>
 
-          <button type="button" data-value="7" class="btn btn-num" aria-label="Digit 7">7</button>
-          <button type="button" data-value="8" class="btn btn-num" aria-label="Digit 8">8</button>
-          <button type="button" data-value="9" class="btn btn-num" aria-label="Digit 9">9</button>
-          <button type="button" data-operator="×" class="btn btn-operator" aria-label="Multiplication Operator">×</button>
+        <button type="button" data-action="ln" class="btn btn-sci">ln</button>
+        <button type="button" data-action="log" class="btn btn-sci">log</button>
+        <button type="button" data-action="reciprocal" class="btn btn-sci">1/x</button>
+        <button type="button" data-value="e" class="btn btn-sci">e</button>
 
-          <button type="button" data-value="4" class="btn btn-num" aria-label="Digit 4">4</button>
-          <button type="button" data-value="5" class="btn btn-num" aria-label="Digit 5">5</button>
-          <button type="button" data-value="6" class="btn btn-num" aria-label="Digit 6">6</button>
-          <button type="button" data-operator="-" class="btn btn-operator" aria-label="Subtraction Operator">−</button>
+        <button type="button" data-action="sqrt" class="btn btn-sci">√</button>
+        <button type="button" data-action="cbrt" class="btn btn-sci">∛</button>
+        <button type="button" data-action="pow2" class="btn btn-sci">x²</button>
+        <button type="button" data-action="pow3" class="btn btn-sci">x³</button>
 
-          <button type="button" data-value="1" class="btn btn-num" aria-label="Digit 1">1</button>
-          <button type="button" data-value="2" class="btn btn-num" aria-label="Digit 2">2</button>
-          <button type="button" data-value="3" class="btn btn-num" aria-label="Digit 3">3</button>
-          <button type="button" data-operator="+" class="btn btn-operator" aria-label="Addition Operator">+</button>
+        <button type="button" data-action="abs" class="btn btn-sci">|x|</button>
+        <button type="button" data-action="fact" class="btn btn-sci">x!</button>
+        <button type="button" data-operator="^" class="btn btn-sci">xʸ</button>
+        <button type="button" data-action="clear-entry" class="btn btn-sci" style="color: #f87171;">CE</button>
 
-          <button type="button" data-value="." class="btn btn-num" aria-label="Decimal Separator Point">.</button>
-          <button type="button" data-value="0" class="btn btn-num" aria-label="Digit 0">0</button>
-          <button type="button" data-action="backspace" class="btn btn-utility" aria-label="Delete Single Character Backward Trailing">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
-              <line x1="18" y1="9" x2="12" y2="15"></line>
-              <line x1="12" y1="9" x2="18" y2="15"></line>
-            </svg>
-          </button>
-          <button type="button" data-action="calculate" class="btn btn-equals" aria-label="Execute Formulation Assessment Equation">=</button>
-        </div>
-      </section>
+        <button type="button" data-action="clear" class="btn btn-utility btn-clear">C</button>
+        <button type="button" data-action="toggle-sign" class="btn btn-utility">±</button>
+        <button type="button" data-action="percent" class="btn btn-utility">%</button>
+        <button type="button" data-operator="÷" class="btn btn-operator">÷</button>
 
-      <aside class="history-sidebar" aria-label="Chronicle Ledger Transaction Repository">
-        <div class="sidebar-header">
-          <h2>Chronicle Ledger</h2>
-          <div class="ledger-actions">
-            <button id="export-history" class="btn-ledger-action" aria-label="Export Ledger Records Repository to CSV Sheet">Export</button>
-            <button id="clear-history" class="btn-ledger-action clear-hover" aria-label="Purge Local Calculation History Cache">Clear</button>
-          </div>
-        </div>
-        <div id="history-log" class="history-log" role="log">
-          <div class="empty-state">No recent records</div>
-        </div>
-      </aside>
+        <button type="button" data-value="7" class="btn btn-num">7</button>
+        <button type="button" data-value="8" class="btn btn-num">8</button>
+        <button type="button" data-value="9" class="btn btn-num">9</button>
+        <button type="button" data-operator="×" class="btn btn-operator">×</button>
+
+        <button type="button" data-value="4" class="btn btn-num">4</button>
+        <button type="button" data-value="5" class="btn btn-num">5</button>
+        <button type="button" data-value="6" class="btn btn-num">6</button>
+        <button type="button" data-operator="-" class="btn btn-operator">−</button>
+
+        <button type="button" data-value="1" class="btn btn-num">1</button>
+        <button type="button" data-value="2" class="btn btn-num">2</button>
+        <button type="button" data-value="3" class="btn btn-num">3</button>
+        <button type="button" data-operator="+" class="btn btn-operator">+</button>
+
+        <button type="button" data-value="." class="btn btn-num">.</button>
+        <button type="button" data-value="0" class="btn btn-num">0</button>
+        <button type="button" data-action="backspace" class="btn btn-utility btn-backspace-container" aria-label="Delete">
+          <svg viewBox="0 0 24 24" class="backspace-icon"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+        </button>
+        <button type="button" data-action="calculate" class="btn btn-equals">=</button>
+      </div>
     </main>
+
+    <aside id="history-drawer" class="history-drawer">
+      <div class="drawer-header">
+        <h2>Ledger Chronicle</h2>
+        <button id="close-history" class="btn-close-drawer">×</button>
+      </div>
+      <div class="drawer-actions">
+        <button id="clear-history" class="btn-clear-history">Clear History</button>
+      </div>
+      <div id="history-content" class="history-content">
+        <div class="empty-state">No calculations yet.</div>
+      </div>
+    </aside>
+
+    <footer class="app-footer">
+      Made by NOVIVA GROUP
+    </footer>
   </div>
 
   <script src="app.js" defer></script>

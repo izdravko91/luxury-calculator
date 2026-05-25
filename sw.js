@@ -1,41 +1,30 @@
-const CACHE_NAME = 'aethelis-cache-v1';
-const ASSETS_TO_CACHE = [
-  'index.html',
-  'style.css',
-  'app.js',
-  'manifest.json',
-  'icon.png'
+const CACHE_NAME = 'aureum-cache-v3.8';
+const ASSETS = [
+  '/',
+  '/index.html',
+  '/style.css',
+  '/app.js',
+  '/manifest.json'
 ];
 
-// Събитие по инсталация - записваме файловете в локалния кеш
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
+self.addEventListener('install', (e) => {
+  e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
+  self.skipWaiting();
 });
 
-// Събитие по активиране - почистване на стари кешове при обновяване на кода
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
-            return caches.delete(cache);
-          }
-        })
-      );
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(keys.map((key) => {
+        if (key !== CACHE_NAME) return caches.delete(key);
+      }));
     })
   );
+  self.clients.claim();
 });
 
-// Прехващане на мрежови заявки - ако сме офлайн, зареждаме директно от кеша
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    })
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    caches.match(e.request).then((res) => res || fetch(e.request))
   );
 });
