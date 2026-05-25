@@ -3,6 +3,7 @@
 const displayCurrent = document.getElementById('display-current');
 const displayExpression = document.getElementById('display-expression');
 const keypad = document.getElementById('keypad');
+const scientificPad = document.getElementById('scientific-pad');
 const drawer = document.getElementById('history-drawer');
 const historyContent = document.getElementById('history-content');
 const btnScientific = document.getElementById('toggle-scientific');
@@ -25,8 +26,9 @@ document.getElementById('toggle-history').addEventListener('click', () => drawer
 document.getElementById('close-history').addEventListener('click', () => drawer.classList.remove('open'));
 document.getElementById('clear-history').addEventListener('click', () => { historyLog = []; renderHistory(); });
 
+// Логика за мазно отваряне на изолирания научен панел
 btnScientific.addEventListener('click', () => {
-  keypad.classList.toggle('scientific-active');
+  scientificPad.classList.toggle('is-open');
   btnScientific.classList.toggle('active');
   triggerTactileAudio();
 });
@@ -38,7 +40,6 @@ function sanitizeFloat(num) {
   return parseFloat(Number(num).toPrecision(12));
 }
 
-// Изчисляване на факториел (x!)
 function calculateFactorial(n) {
   if (n < 0 || !Number.isInteger(n)) return "Error";
   if (n === 0 || n === 1) return 1;
@@ -48,10 +49,7 @@ function calculateFactorial(n) {
 }
 
 // --- 3. CORE LOGIC ---
-keypad.addEventListener('click', (e) => {
-  const target = e.target.closest('button');
-  if (!target) return;
-  
+const handleEventInput = (target) => {
   const value = target.dataset.value;
   const operator = target.dataset.operator;
   const action = target.dataset.action;
@@ -61,6 +59,16 @@ keypad.addEventListener('click', (e) => {
   if (action) executeAction(action);
   
   triggerTactileAudio();
+};
+
+keypad.addEventListener('click', (e) => {
+  const target = e.target.closest('button');
+  if (target) handleEventInput(target);
+});
+
+scientificPad.addEventListener('click', (e) => {
+  const target = e.target.closest('button');
+  if (target) handleEventInput(target);
 });
 
 function appendValue(val) {
@@ -80,7 +88,6 @@ function setOperator(op) {
   if (isCalculated) isCalculated = false;
   if (currentInput === 'Error') currentInput = '0';
   
-  // Верижно смятане и смяна на знаци
   if (currentInput === '0' && expression.length > 0) {
     expression = expression.trim().slice(0, -1).trim() + ` ${op} `;
   } else {
@@ -103,25 +110,16 @@ function executeAction(action) {
   if (action === 'toggle-sign') currentInput = String(parseFloat(currentInput) * -1);
   if (action === 'percent') { currentInput = String(sanitizeFloat(parseFloat(currentInput) / 100)); isCalculated = true; }
   
-  // 🔥 РАЗШИРЕНИ НАУЧНИ ИЗЧИСЛЕНИЯ
   let num = parseFloat(currentInput);
-  
-  // Тригонометрия (Градуси)
   if (action === 'sin') { currentInput = String(sanitizeFloat(Math.sin(num * (Math.PI / 180)))); isCalculated = true; }
   if (action === 'cos') { currentInput = String(sanitizeFloat(Math.cos(num * (Math.PI / 180)))); isCalculated = true; }
   if (action === 'tan') { currentInput = String(sanitizeFloat(Math.tan(num * (Math.PI / 180)))); isCalculated = true; }
-  
-  // Логаритми
   if (action === 'ln') { currentInput = num > 0 ? String(sanitizeFloat(Math.log(num))) : "Error"; isCalculated = true; }
   if (action === 'log') { currentInput = num > 0 ? String(sanitizeFloat(Math.log10(num))) : "Error"; isCalculated = true; }
-  
-  // Корени и Степени
   if (action === 'sqrt') { currentInput = num >= 0 ? String(sanitizeFloat(Math.sqrt(num))) : "Error"; isCalculated = true; }
   if (action === 'cbrt') { currentInput = String(sanitizeFloat(Math.cbrt(num))); isCalculated = true; }
   if (action === 'pow2') { currentInput = String(sanitizeFloat(Math.pow(num, 2))); isCalculated = true; }
   if (action === 'pow3') { currentInput = String(sanitizeFloat(Math.pow(num, 3))); isCalculated = true; }
-  
-  // Допълнителни
   if (action === 'reciprocal') { currentInput = num !== 0 ? String(sanitizeFloat(1 / num)) : "Error"; isCalculated = true; }
   if (action === 'abs') { currentInput = String(sanitizeFloat(Math.abs(num))); isCalculated = true; }
   if (action === 'fact') { currentInput = String(calculateFactorial(num)); isCalculated = true; }
@@ -133,8 +131,6 @@ function executeAction(action) {
 function executeCalculation() {
   if (!expression && !currentInput) return;
   let finalExpression = expression + currentInput;
-  
-  // Заменяме визуалните знаци с машинни (вкл. ^ за повдигане на степен)
   let evalCode = finalExpression.replace(/×/g, '*').replace(/÷/g, '/').replace(/\^/g, '**');
   
   try {
@@ -175,33 +171,22 @@ function renderHistory() {
   `).join('');
 }
 
-// --- 4. TACTILE AUDIO ---
 function triggerTactileAudio() {
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator(); 
-  const gain = ctx.createGain();
-  
-  osc.type = 'sine'; 
-  osc.frequency.setValueAtTime(1000, ctx.currentTime);
+  const osc = ctx.createOscillator(); const gain = ctx.createGain();
+  osc.type = 'sine'; osc.frequency.setValueAtTime(1000, ctx.currentTime);
   gain.gain.setValueAtTime(0.01, ctx.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.03);
-  
-  osc.connect(gain); 
-  gain.connect(ctx.destination);
-  osc.start(); 
-  osc.stop(ctx.currentTime + 0.03);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(); osc.stop(ctx.currentTime + 0.03);
 }
 
-// --- 5. KEYBOARD MODE ---
 window.addEventListener('keydown', (e) => {
   if (e.key >= '0' && e.key <= '9') { appendValue(e.key); triggerTactileAudio(); }
   if (e.key === '.') { appendValue('.'); triggerTactileAudio(); }
-  
-  // Добавена поддръжка за клавиша ^ (Shift + 6)
   if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/' || e.key === '^') { 
     setOperator(e.key === '*' ? '×' : e.key === '/' ? '÷' : e.key); triggerTactileAudio(); 
   }
-  
   if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); executeCalculation(); triggerTactileAudio(); }
   if (e.key === 'Backspace') { executeAction('backspace'); triggerTactileAudio(); }
   if (e.key === 'Escape') { executeAction('clear'); triggerTactileAudio(); }

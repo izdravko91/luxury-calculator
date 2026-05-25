@@ -3,10 +3,9 @@
 :root {
   --glass-blur: blur(40px);
   --shadow-ambient: 0 40px 100px rgba(0, 0, 0, 0.8);
-  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* 1. DARK LUXURY */
 html[data-theme="dark-luxury"] {
   --bg-app: #050505;
   --bg-card: rgba(20, 22, 28, 0.75);
@@ -20,7 +19,6 @@ html[data-theme="dark-luxury"] {
   --orb-2: rgba(40, 50, 70, 0.3);
 }
 
-/* 2. AUREUM GOLD */
 html[data-theme="aureum-gold"] {
   --bg-app: #0f0a02;
   --bg-card: rgba(35, 25, 10, 0.85);
@@ -34,7 +32,6 @@ html[data-theme="aureum-gold"] {
   --orb-2: rgba(150, 100, 20, 0.2);
 }
 
-/* 3. MIDNIGHT BLUE */
 html[data-theme="midnight-blue"] {
   --bg-app: #020617;
   --bg-card: rgba(15, 23, 42, 0.75);
@@ -48,7 +45,6 @@ html[data-theme="midnight-blue"] {
   --orb-2: rgba(14, 165, 233, 0.1);
 }
 
-/* 4. MINIMAL WHITE */
 html[data-theme="minimal-white"] {
   --bg-app: #f1f5f9;
   --bg-card: rgba(255, 255, 255, 0.85);
@@ -97,8 +93,28 @@ html[data-theme="minimal-white"] .btn-history-toggle { color: #94a3b8; }
 html[data-theme="minimal-white"] .btn-sci-toggle { color: #94a3b8; }
 .btn-sci-toggle:hover, .btn-sci-toggle.active { color: var(--accent-color); }
 
+/* ИЗОЛИРАНИ ГРИДОВЕ – ТОВА ОПРАВЯ БЪГА */
 .keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.btn { border: none; border-radius: 16px; font-size: 1.35rem; font-weight: 300; cursor: pointer; display: flex; justify-content: center; align-items: center; background: var(--btn-num); color: var(--text-primary); height: 64px; transition: all 0.15s ease; box-sizing: border-box; }
+
+.scientific-pad-grid { 
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 10px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-bottom: 0;
+  transition: max-height 0.3s var(--transition-smooth), opacity 0.2s ease, margin-bottom 0.3s var(--transition-smooth);
+}
+
+/* Когато научният панел е отворен */
+.scientific-pad-grid.is-open {
+  max-height: 240px;
+  opacity: 1;
+  margin-bottom: 10px;
+}
+
+.btn { border: none; border-radius: 16px; font-size: 1.35rem; font-weight: 300; cursor: pointer; display: flex; justify-content: center; align-items: center; background: var(--btn-num); color: var(--text-primary); height: 60px; transition: all 0.15s ease; box-sizing: border-box; }
 .btn:hover { background: var(--btn-num-hover); transform: scale(0.97); }
 .btn:active { transform: scale(0.93); }
 .btn-operator { color: var(--accent-color); font-size: 1.6rem; font-weight: 400; }
@@ -108,35 +124,15 @@ html[data-theme="minimal-white"] .btn-utility { color: #475569; }
 .btn-equals { background: var(--accent-color) !important; color: #000 !important; font-weight: 500; font-size: 1.6rem; }
 html[data-theme="minimal-white"] .btn-equals { color: #fff !important; }
 
-/* 🛡️ FIX НА BACKSPACE ИКОНАТА */
-.btn-backspace-container { display: flex; justify-content: center; align-items: center; background: var(--btn-num); }
+/* Кристално чист Backspace */
+.btn-backspace-container { display: flex; justify-content: center; align-items: center; }
 .backspace-icon { width: 22px; height: 22px; stroke: var(--text-primary); fill: none; stroke-width: 1.8; pointer-events: none; }
 html[data-theme="minimal-white"] .backspace-icon { stroke: #475569; }
 
-/* ✨ SCIENTIFIC MODE & ADAPTIVE SIZING */
-.btn-sci { display: none; font-size: 1rem; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.4); }
+/* Дизайн на научните бутони */
+.btn-sci { font-size: 1rem; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.4); height: 48px; border-radius: 12px; }
 html[data-theme="minimal-white"] .btn-sci { background: rgba(0,0,0,0.02); color: #64748b; }
-.btn-sci:hover { color: var(--accent-color); }
-
-.keypad-grid.scientific-active .btn-sci { 
-  display: flex; 
-  animation: fadeSci 0.3s ease forwards;
-}
-
-.keypad-grid.scientific-active .btn {
-  height: 50px;
-  font-size: 1.15rem;
-  border-radius: 12px;
-}
-.keypad-grid.scientific-active .btn-operator,
-.keypad-grid.scientific-active .btn-equals {
-  font-size: 1.3rem;
-}
-
-@keyframes fadeSci {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.btn-sci:hover { color: var(--accent-color); background: rgba(255,255,255,0.05); }
 
 /* History Drawer */
 .history-drawer { position: absolute; top: 0; right: -100%; width: 85%; height: 100%; background: var(--bg-card); backdrop-filter: blur(20px); border-left: 1px solid var(--border-glow); padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10; }

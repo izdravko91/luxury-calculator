@@ -1,10 +1,10 @@
-const CACHE_NAME = 'aureum-cache-v3.9';
+const CACHE_NAME = 'aureum-cache-v4.0';
 const ASSETS = [
   './',
   './index.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json'
+  './style.css',
+  './app.js',
+  './manifest.json'
 ];
 
 self.addEventListener('install', (e) => {
