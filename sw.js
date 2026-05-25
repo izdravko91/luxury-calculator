@@ -1,7 +1,7 @@
-const CACHE_NAME = 'aureum-cache-v3.8';
+const CACHE_NAME = 'aureum-cache-v3.9';
 const ASSETS = [
-  '/',
-  '/index.html',
+  './',
+  './index.html',
   '/style.css',
   '/app.js',
   '/manifest.json'

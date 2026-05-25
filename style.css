@@ -98,7 +98,7 @@ html[data-theme="minimal-white"] .btn-sci-toggle { color: #94a3b8; }
 .btn-sci-toggle:hover, .btn-sci-toggle.active { color: var(--accent-color); }
 
 .keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.btn { border: none; border-radius: 16px; font-size: 1.35rem; font-weight: 300; cursor: pointer; display: flex; justify-content: center; align-items: center; background: var(--btn-num); color: var(--text-primary); height: 64px; transition: all 0.15s ease; }
+.btn { border: none; border-radius: 16px; font-size: 1.35rem; font-weight: 300; cursor: pointer; display: flex; justify-content: center; align-items: center; background: var(--btn-num); color: var(--text-primary); height: 64px; transition: all 0.15s ease; box-sizing: border-box; }
 .btn:hover { background: var(--btn-num-hover); transform: scale(0.97); }
 .btn:active { transform: scale(0.93); }
 .btn-operator { color: var(--accent-color); font-size: 1.6rem; font-weight: 400; }
@@ -107,7 +107,11 @@ html[data-theme="minimal-white"] .btn-utility { color: #475569; }
 .btn-clear { color: #f87171 !important; }
 .btn-equals { background: var(--accent-color) !important; color: #000 !important; font-weight: 500; font-size: 1.6rem; }
 html[data-theme="minimal-white"] .btn-equals { color: #fff !important; }
-.backspace-icon { width: 24px; height: 24px; stroke: var(--text-primary); fill: none; stroke-width: 1.5; }
+
+/* 🛡️ FIX НА BACKSPACE ИКОНАТА */
+.btn-backspace-container { display: flex; justify-content: center; align-items: center; background: var(--btn-num); }
+.backspace-icon { width: 22px; height: 22px; stroke: var(--text-primary); fill: none; stroke-width: 1.8; pointer-events: none; }
+html[data-theme="minimal-white"] .backspace-icon { stroke: #475569; }
 
 /* ✨ SCIENTIFIC MODE & ADAPTIVE SIZING */
 .btn-sci { display: none; font-size: 1rem; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.4); }
@@ -119,7 +123,6 @@ html[data-theme="minimal-white"] .btn-sci { background: rgba(0,0,0,0.02); color:
   animation: fadeSci 0.3s ease forwards;
 }
 
-/* Когато имаме 36 бутона, смаляваме леко всички, за да изглежда прибрано */
 .keypad-grid.scientific-active .btn {
   height: 50px;
   font-size: 1.15rem;
